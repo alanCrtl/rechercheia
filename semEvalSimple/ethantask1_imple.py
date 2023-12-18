@@ -10,7 +10,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 import argparse
 from tqdm import tqdm  
+"""
+convert to notebook, verify that you can follow training progress
+increase model size, check out the actual mode arch
+make sure model will be saved
+try understand subtask 2, prototype, and train
 
+"""
 class BinaryClassificationModel(nn.Module):
     def __init__(self, input_size, hidden_size, output_size):
         super(BinaryClassificationModel, self).__init__()
@@ -142,7 +148,7 @@ def display_examples(dataset, model, test_loader, num_examples=5, batch_size=32)
                 if examples_displayed >= num_examples:
                     return
 
-def save_predictions_to_csv(predictions, true_labels, sentences, file_path='results.csv'):
+def save_predictions_to_csv(predictions, true_labels, sentences, file_path='results/results.csv'):
     result_df = pd.DataFrame({
         'True Label': true_labels,
         'Predicted Label': predictions,
@@ -151,7 +157,10 @@ def save_predictions_to_csv(predictions, true_labels, sentences, file_path='resu
     result_df.to_csv(file_path, index=False)
     print(f"Predictions saved to {file_path}")
 
+
+# ======================================
 # ================ MAIN ================
+# ======================================
 def main():
     parser = argparse.ArgumentParser(description='Train or evaluate the binary classification model.')
     parser.add_argument('--retrain', action='store_true', help='Retrain the model if provided.')

@@ -9,6 +9,8 @@ import numpy as np
 import sys
 nltk.download('punkt')
 nltk.download('averaged_perceptron_tagger')
+
+# ========== DEFS ========== 
 def get_antecedent_begin_end(sentence_token, antetoken):
     '''
     :param sentence_token: the whole tokenized sentence
@@ -491,10 +493,19 @@ def get_predict_content(test_data_reader,y_test):
         predict_sentence.append(consequence)
         predict_sentences.append(predict_sentence)
     return predict_sentences
+
+import sys
+def pp(*p):
+    print(*p);sys.exit()
+	
+# ========== START OF PROGRAM ========== 
 docs_train = []
 docs_test=[]
-filepath_train = r"task2_train.csv"
-filepath_test=r"task2_test.csv"
+filepath_train = r"Subtask-2/task2_train.csv"
+filepath_test=r"Subtask-2/task2_test.csv"
+
+# computes an array of 'O', then populated by the antecedent/consequent index location on tokenss
+# ['B-Con', 'I-Ant', 'I-Ant', 'I-Ant', 'I-Ant', 'I-Ant', 'I-Ant', 'I-Ant', 'I-Ant', 'I-Ant', 'I-Ant', 'I-Ant', 'I-Ant', 'I-Ant', 'I-Ant', 'I-Ant', 'I-Ant', 'I-Ant', 'I-Ant', 'I-Ant', 'I-Ant', 'I-Ant', 'I-Ant', 'I-Ant', 'I-Ant', 'I-Ant', 'I-Ant', 'I-Ant', 'I-Ant', 'I-Ant', 'I-Ant', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O']
 with open(filepath_train, 'r', encoding="utf-8",errors="ignore") as readFile:  # file.close()
     reader = csv.reader(readFile)  # csv reader
 
@@ -516,7 +527,6 @@ with open(filepath_train, 'r', encoding="utf-8",errors="ignore") as readFile:  #
             if antf!=0:
                 anttoken=nltk.tokenize.word_tokenize(ant)
 
-
             if con!='N/A':
                 conf=1
             if conf!=0:
@@ -537,7 +547,6 @@ with open(filepath_train, 'r', encoding="utf-8",errors="ignore") as readFile:  #
                 label[conse_begin_index] = 'B-Con'
                 for i in range(1, len(contoken)):
                     label[conse_begin_index + i] = 'I-Con'
-
             for i in range(0, len(sentence_token)):
                 subdoc.append(tuple((sentence_token[i], label[i])))
 
@@ -546,6 +555,7 @@ with open(filepath_train, 'r', encoding="utf-8",errors="ignore") as readFile:  #
             docs_train.append(subdoc)
 readFile.close()
 
+# same thing as above on test
 with open(filepath_test, 'r', encoding="utf-8",errors="ignore") as readFile:  # file.close()
     reader = csv.reader(readFile)
 
@@ -596,12 +606,14 @@ with open(filepath_test, 'r', encoding="utf-8",errors="ignore") as readFile:  # 
 
             docs_test.append(subdoc)
 readFile.close()
+
+
 data_train = []
 data_test=[]
+# tagging the tokens
 for i, doc in enumerate(docs_train):
     tokens = [t for t, label in doc[1:]]
     tagged = nltk.pos_tag(tokens)
-
 
     subdata=[(w, pos, label) for (w, label), (word, pos) in zip(doc[1:], tagged)]
     subdata.insert(0,doc[0])
@@ -624,7 +636,7 @@ with open('test_v2_after_proecessing.csv','wt',encoding='utf-8',newline='') as s
     for row in data_test:
         cw.writerow(row)
 
-
+# reads data from the csvs and put it in lists
 train_data_reader=[]
 train_data_reader_line=[]
 with open('train_v2_after_proecessing.csv','r',encoding='utf-8',errors="ignore") as csvfile:
@@ -642,6 +654,7 @@ with open('test_v2_after_proecessing.csv','r',encoding='utf-8',errors="ignore") 
         test_data_reader_line.insert(0,row[0])
         test_data_reader.append(test_data_reader_line)
 
+# getting the datasets ready
 train_sentence_indexs=[doc[0] for doc in train_data_reader]
 test_sentence_indexs=[doc[0] for doc in test_data_reader]
 X_train = [extract_features(doc[1:]) for doc in train_data_reader]
@@ -654,6 +667,7 @@ y_train=[[train_sentence_indexs[index],y_sentence] for index, y_sentence in enum
 X_test=[[test_sentence_indexs[index],x_sentence] for index, x_sentence in enumerate(X_test)]
 y_test=[[test_sentence_indexs[index],y_sentence] for index, y_sentence in enumerate(y_test)]
 
+# training
 trainer = pycrfsuite.Trainer(verbose=True)
 for xseq, yseq in zip(X_train, y_train):
     trainer.append(xseq[1], yseq[1])
