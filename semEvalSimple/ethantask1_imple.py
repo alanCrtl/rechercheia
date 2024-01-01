@@ -180,7 +180,7 @@ def main():
     args = parser.parse_args()
 
     # ====== preprocessing ====== 
-    data_path = 'Subtask-1/subtask1_train.csv'
+    data_path = 'Subtask-1/train.csv'
     df = preprocess_data(data_path)
 
     sentences = [text.split() for text in df['sentence'] if not pd.isnull(text)]

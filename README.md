@@ -8,7 +8,9 @@ semEvalSimple : notre reimplementation du papier
 
 ### TODO
 
-- task1:
+lancer roberta finetunning dans google cloud sur gpu
+
+- task1(F1 score current=0.30):
 	- obtenir des resultats avec le nb du mec (F1: 0.7 pour 4 epoch?)
 	- entrainer mon fichier sur cloud avec gpu acceleration
 
