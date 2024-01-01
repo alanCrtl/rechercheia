@@ -12,7 +12,7 @@ import argparse
 from tqdm import tqdm  
 """
 TODO:
-Play with architecture.
+Lancer sur cloud
 """
 class BinaryClassificationModel(nn.Module):
     def __init__(self, input_size, hidden_size, output_size):
@@ -159,7 +159,7 @@ def display_examples(dataset, model, test_loader, num_examples=5, batch_size=32)
                 if examples_displayed >= num_examples:
                     return
 
-def save_predictions_to_csv(predictions, true_labels, sentences, file_path='results/results.csv'):
+def save_predictions_to_csv(predictions, true_labels, sentences, file_path='results/predictions.csv'):
     result_df = pd.DataFrame({
         'True Label': true_labels,
         'Predicted Label': predictions,
@@ -176,7 +176,7 @@ def main():
     parser = argparse.ArgumentParser(description='Train or evaluate the binary classification model.')
     parser.add_argument('-rt','--retrain', action='store_true', help='Retrain the model if provided.')
     parser.add_argument('-ex', '--examples', type=int, default=0, help='Number of examples to display.')
-    parser.add_argument('-ev','--eval', action='store_true', help='show evaluations.')
+    parser.add_argument('-ep', '--epochs', type=int, default=10, help='epochs of training')
     args = parser.parse_args()
 
     # ====== preprocessing ====== 
@@ -193,7 +193,7 @@ def main():
     output_size = 1
     learning_rate = 0.001
     batch_size = 32
-    num_epochs = 1500
+    num_epochs = args.epochs
 
     model = BinaryClassificationModel(input_size=input_size, hidden_size=hidden_size, output_size=output_size)
 
