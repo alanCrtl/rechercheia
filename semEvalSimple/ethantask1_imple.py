@@ -11,11 +11,11 @@ import matplotlib.pyplot as plt
 import argparse
 from tqdm import tqdm  
 """
+TODO:
 convert to notebook, verify that you can follow training progress
 increase model size, check out the actual mode arch
 make sure model will be saved
 try understand subtask 2, prototype, and train
-
 """
 class BinaryClassificationModel(nn.Module):
     def __init__(self, input_size, hidden_size, output_size):
@@ -68,10 +68,13 @@ def train_word2vec_model(sentences):
 
 def train_model(model, train_loader, criterion, optimizer, num_epochs=10):
     train_losses = []
+    train_precisions =[]
 
     for epoch in range(num_epochs):
         model.train()
         total_loss = 0
+        total_precision = 0
+        total_batches = len(train_loader)
         # Wrap the train_loader with tqdm for a progress bar
         for batch in tqdm(train_loader, desc=f'Epoch {epoch + 1}/{num_epochs}'):
             sentences = torch.FloatTensor(batch['sentence'].float())  # Convert to float
@@ -86,12 +89,23 @@ def train_model(model, train_loader, criterion, optimizer, num_epochs=10):
             optimizer.step()
 
             total_loss += loss.item()
+            
+            # Calculate precision for the current batch
+            predictions = (outputs > 0.5).float()
+            batch_precision = precision_score(labels.int().numpy(), predictions.int().numpy(), average='binary', zero_division=1)
+            total_precision += batch_precision
+        # Calculate average precision for the epoch
+        epoch_loss = total_loss / total_batches
+        epoch_precision = total_precision / total_batches
 
-        train_losses.append(total_loss / len(train_loader))
-        print(f'Epoch [{epoch + 1}/{num_epochs}], Loss: {total_loss / len(train_loader)}')
+        train_losses.append(epoch_loss)
+        train_precisions.append(epoch_precision)
+
+        print(f'Epoch [{epoch + 1}/{num_epochs}], Loss: {epoch_loss}, Precision: {epoch_precision}')
 
     # Plot the training loss
     plt.plot(range(1, num_epochs + 1), train_losses, label='Training Loss')
+    plt.plot(range(1, num_epochs + 1), train_precisions, label='Training Precision')
     plt.xlabel('Epoch')
     plt.ylabel('Loss')
     plt.title('Training Loss Over Epochs')
@@ -163,9 +177,9 @@ def save_predictions_to_csv(predictions, true_labels, sentences, file_path='resu
 # ======================================
 def main():
     parser = argparse.ArgumentParser(description='Train or evaluate the binary classification model.')
-    parser.add_argument('--retrain', action='store_true', help='Retrain the model if provided.')
-    parser.add_argument('--examples', type=int, default=0, help='Number of examples to display.')
-    parser.add_argument('--eval', action='store_true', help='show evaluations.')
+    parser.add_argument('-rt','--retrain', action='store_true', help='Retrain the model if provided.')
+    parser.add_argument('-ex', '--examples', type=int, default=0, help='Number of examples to display.')
+    parser.add_argument('-ev','--eval', action='store_true', help='show evaluations.')
     args = parser.parse_args()
 
     # ====== preprocessing ====== 
@@ -178,11 +192,11 @@ def main():
     train_df, test_df = train_test_split(df, test_size=0.2, random_state=42)
 
     input_size = word2vec_model.vector_size
-    hidden_size = 32
+    hidden_size = 128
     output_size = 1
     learning_rate = 0.001
     batch_size = 32
-    num_epochs = 100
+    num_epochs = 10
 
     model = BinaryClassificationModel(input_size=input_size, hidden_size=hidden_size, output_size=output_size)
 
@@ -222,10 +236,10 @@ def main():
         print(f'\nDisplaying {args.examples} examples:')
         display_examples(dataset_test, model, loader_test, num_examples=args.examples)
     
-    
+    # ===== saving results =====
     # Save the model if retraining or not provided
     if args.retrain or not os.path.exists(model_path):
-        print("Saving the model.")
+        print(f"Saving the model to {model_path}.")
         os.makedirs(os.path.dirname(model_path), exist_ok=True)
         torch.save(model.state_dict(), model_path)
 
