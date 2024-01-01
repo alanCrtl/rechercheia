@@ -8,9 +8,6 @@ from keras.layers import Dense
 from keras.optimizers import Adam
 from transformers import BertTokenizer, TFBertForSequenceClassification
 
-import sys
-def pp(*p): print(*p);sys.exit()
-
 # Load the training and test dataset
 train_data = pd.read_csv("Subtask-1/subtask1_train.csv", sep=',')
 test_data = pd.read_csv("Subtask-1/subtask1_test.csv", sep=',')

@@ -8,8 +8,9 @@ semEvalSimple : notre reimplementation du papier
 
 ### TODO
 
-- task1: 
-	- entrainer sur cloud avec gpu acceleration
+- task1:
+	- obtenir des resultats avec le nb du mec (F1: 0.7 pour 4 epoch?)
+	- entrainer mon fichier sur cloud avec gpu acceleration
 
 - task2:
 	- lire chatGPt explication
