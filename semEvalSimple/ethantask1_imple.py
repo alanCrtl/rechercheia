@@ -12,10 +12,7 @@ import argparse
 from tqdm import tqdm  
 """
 TODO:
-convert to notebook, verify that you can follow training progress
-increase model size, check out the actual mode arch
-make sure model will be saved
-try understand subtask 2, prototype, and train
+Play with architecture.
 """
 class BinaryClassificationModel(nn.Module):
     def __init__(self, input_size, hidden_size, output_size):
@@ -196,7 +193,7 @@ def main():
     output_size = 1
     learning_rate = 0.001
     batch_size = 32
-    num_epochs = 10
+    num_epochs = 1500
 
     model = BinaryClassificationModel(input_size=input_size, hidden_size=hidden_size, output_size=output_size)
 

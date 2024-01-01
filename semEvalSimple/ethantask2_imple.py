@@ -1,101 +1,78 @@
 """
-Paper:
-ETHAN at SemEval-2020 Task 5: Modelling Causal Reasoning in
-Language using neuro-symbolic cloud computing
-Training Data is like : ID Sentence Antecedent
-the goal of subtask 2 is to predict the presence
-of antecedent by combining neural network architecture
-and neurosymbolism.
+task-2 implementation
 
 TODO: implement consistuency parser
 NOTE: 	use this https://demo.allennlp.org/constituency-parsing
 		and this https://demo.allennlp.org/dependency-parsing
 
-Example data:
-sentenceID	sentence	antecedent
-200000	I don't think any of us---even economic gurus like Paul Krugman---really, truly understand just how bad it could've gotten "on Main Street" if the stimulus bill had become hamstrung by a filibuster threat or recalcitrant conservadems, the way so much of our legislation has since.	if the stimulus bill had become hamstrung by a filibuster threat or recalcitrant conservadems
-------
-https://chat.openai.com/c/7cdc1342-381a-42c4-8b78-54f453fe13ce
+======
+Example data from training set:
+sentenceID	sentence	antecedent	consequent	antecedent_startid	antecedent_endid	consequent_startid	consequent_endid
+200000	I don't think any of us---even economic gurus like Paul Krugman---really, truly understand just how bad it could've gotten "on Main Street" if the stimulus bill had become hamstrung by a filibuster threat or recalcitrant conservadems, the way so much of our legislation has since.	if the stimulus bill had become hamstrung by a filibuster threat or recalcitrant conservadems	I don't think any of us---even economic gurus like Paul Krugman---really, truly understand just how bad it could've gotten "on Main Street"	140	232	0	138
+
+======
+CHATGPT after giving notebook in raw input:
+(https://chat.openai.com/c/de3368c5-c17a-4266-9c52-48cfd6fa3a81)
+
+It looks like you've shared a code snippet written in Python. The code appears to be a part of a script or notebook related to natural language processing tasks. The functions defined in the code seem to be involved in processing and analyzing text, particularly for extracting modal verbs and antecedents.
+
+Here's a brief overview of the functions:
+
+defragment(fragments, text, original, removed):
+
+Takes a list of fragments, the original text, and removed characters as input.
+Sorts fragments by length.
+Tries to find the fragments in the text, and if found, overlays them on the original text.
+Handles cases where fragments overlap or have no overlap.
+Updates the labels for the result.
+overlay(starting, fragment, original, removed):
+
+Takes a starting position, a fragment dictionary, the original text, and removed characters as input.
+Offsets the fragment's text based on the starting position.
+Adjusts the start and end positions considering removed characters.
+Returns the updated fragment.
+offset(text, starting, original):
+
+Takes a text, starting position, and original text as input.
+Finds the offset positions of the text in the original text.
+Handles cases where characters are removed.
+record(original):
+
+Takes the original text as input.
+Records the indices and characters of the original text in a list.
+contract(text, base):
+
+Takes a text and a base (recorded indices and characters) as input.
+Identifies and removes contracted phrases.
+separate_from(md, pa):
+
+Takes two strings as input (md and pa).
+Separates the substring from md occurring before pa.
+separate_right(md, pa):
+
+Takes two strings as input (md and pa).
+Separates the substring from md occurring after pa.
+separate_left(md, pa):
+
+Takes two strings as input (md and pa).
+Separates the substring from md occurring before pa.
+separate(modal, past):
+
+Takes lists of modal and past strings as input.
+Separates strings in modal and past lists based on their overlapping substrings.
+deoverlap(past):
+
+Takes a list of past strings as input.
+Removes redundant overlapping substrings.
+focus(spans):
+
+Takes a list of spans as input.
+Focuses on specific spans based on their positions.
+chunk(original):
+
+Takes the original text as input.
+Extracts verbs, modals, pasts, and other linguistic components from the text.
+Handles overlap and separation of linguistic components.
+It seems like these functions are used to process and analyze text, particularly for extracting information related to modals and antecedents. If you have specific questions or tasks you'd like assistance with, feel free to ask!
 """
-import spacy
-import tensorflow as tf
-from tensorflow.keras.preprocessing.text import Tokenizer
-from tensorflow.keras.preprocessing.sequence import pad_sequences
-from sklearn.model_selection import train_test_split
-import pandas as pd
-
-# Load spaCy model
-nlp = spacy.load("en_core_web_sm")
-
-# Assuming you have the training data in a CSV file named 'training_data.csv'
-file_path = 'Subtask-2/task2_train.csv'
-
-# Read the CSV file into a pandas DataFrame
-df = pd.read_csv(file_path)
-
-# Define a function to extract syntactic information using spaCy
-def extract_syntactic_info(sentence):
-    doc = nlp(sentence)
-    syntactic_info = []
-    for token in doc:
-        syntactic_info.append({
-            'text': token.text,
-            'lemma': token.lemma_,
-            'pos': token.pos_,
-            'dep': token.dep_,
-        })
-    return syntactic_info
-
-# Apply the function to the dataset
-df['syntactic_info'] = df['sentence'].apply(extract_syntactic_info)
-
-# Tokenize the text data
-tokenizer = Tokenizer()
-tokenizer.fit_on_texts(df['sentence'])
-
-# Convert sentences to sequences
-X = tokenizer.texts_to_sequences(df['sentence'])
-
-# Pad sequences to ensure they have the same length
-X = pad_sequences(X)
-
-# Define the model
-model = tf.keras.Sequential([
-    tf.keras.layers.Embedding(input_dim=len(tokenizer.word_index) + 1, output_dim=100, input_length=X.shape[1]),
-    tf.keras.layers.LSTM(100, return_sequences=True),
-    tf.keras.layers.Attention(),
-    tf.keras.layers.Dense(64, activation='relu'),
-    tf.keras.layers.Dense(1, activation='sigmoid')  # Binary classification for antecedent detection
-])
-
-# Compile the model
-model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
-
-# Define target variable
-y_antecedent = df['antecedent_label']  # Assuming antecedent_label is 0 or 1
-
-# Split the data into training and validation sets
-X_train, X_val, y_train, y_val = train_test_split(X, y_antecedent, test_size=0.2, random_state=42)
-
-# Train the model
-model.fit(X_train, y_train, validation_data=(X_val, y_val), epochs=5, batch_size=32)
-
-# Predict antecedent probabilities
-y_pred_antecedent = model.predict(X_val)
-
-# Create a DataFrame with results
-results_df = pd.DataFrame({
-    'sentenceID': df['sentenceID'],
-    'clabel': [1 if p > 0.5 else 0 for p in y_pred_antecedent],  # Assuming a threshold of 0.5
-    'cprob': y_pred_antecedent.flatten(),
-    'consequent': df['consequent'],
-    'gold_consequent': df['gold_consequent'],
-    'alabel': y_val.tolist(),
-    'aprob': y_pred_antecedent.flatten(),
-    'antecedent': df['antecedent'],
-    'gold_antecedent': df['gold_antecedent']
-})
-
-# Display the results DataFrame
-print(results_df)
 

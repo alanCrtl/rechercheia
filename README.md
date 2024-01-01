@@ -11,17 +11,8 @@ semEvalSimple : implementation minimaliste du papier
 ### TODO
 
 - task1: 
-	- understand what's happening
-	
-	- make it work
+	- entrainer sur cloud avec gpu acceleration
 
 - task2:
-	- read baseline subtask2 to understand
-	
+	- lire chatGPt explication
 	- implement consistuency parser
-
--convert to notebook and train on google cloud
-
--increase model size?
-
--make sure model will be saved
