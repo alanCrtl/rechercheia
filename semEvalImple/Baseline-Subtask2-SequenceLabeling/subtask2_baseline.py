@@ -501,8 +501,8 @@ def pp(*p):
 # ========== START OF PROGRAM ========== 
 docs_train = []
 docs_test=[]
-filepath_train = r"Subtask-2/task2_train.csv"
-filepath_test=r"Subtask-2/task2_test.csv"
+filepath_train = "./Subtask-2/train.csv"
+filepath_test="./Subtask-2/test.csv"
 
 # computes an array of 'O', then populated by the antecedent/consequent index location on tokenss
 # ['B-Con', 'I-Ant', 'I-Ant', 'I-Ant', 'I-Ant', 'I-Ant', 'I-Ant', 'I-Ant', 'I-Ant', 'I-Ant', 'I-Ant', 'I-Ant', 'I-Ant', 'I-Ant', 'I-Ant', 'I-Ant', 'I-Ant', 'I-Ant', 'I-Ant', 'I-Ant', 'I-Ant', 'I-Ant', 'I-Ant', 'I-Ant', 'I-Ant', 'I-Ant', 'I-Ant', 'I-Ant', 'I-Ant', 'I-Ant', 'I-Ant', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O']
