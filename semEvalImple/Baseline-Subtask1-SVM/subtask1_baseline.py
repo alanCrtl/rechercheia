@@ -1,24 +1,25 @@
 # SVM baseline for SemEval-2020 Subtask-1
 
-import pandas as pd
+import nltk
 import numpy as np
-from nltk.tokenize import word_tokenize
+import pandas as pd
 from nltk import pos_tag
 from nltk.corpus import stopwords
-from nltk.stem import WordNetLemmatizer
-from sklearn.preprocessing import LabelEncoder
 from collections import defaultdict
 from nltk.corpus import wordnet as wn
-from sklearn.feature_extraction.text import TfidfVectorizer
+from nltk.tokenize import word_tokenize
+from nltk.stem import WordNetLemmatizer
+from sklearn.preprocessing import LabelEncoder
 from sklearn import model_selection, naive_bayes, svm
+from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics import accuracy_score, recall_score, precision_score, f1_score
 
 np.random.seed(500)
 
 print(">> Read data...")
-path = $data_path$
+path = "../Subtask-1/test.csv"
 corpus = pd.read_csv(path, encoding='utf-8')
-percent = 0.3 	# 0.3 for testing
+percent = 0.3 ###
 print("File: %s" % path)
 
 corpus['sentence'].dropna(inplace=True)
