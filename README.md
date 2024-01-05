@@ -4,6 +4,8 @@ SemEval2020Clone : copie du repo de l'auteur du papier [this repo](https://githu
 
 semEvalImple : notre reimplementation du papier
 
+ethan2020.semeval-1.83.pdf : le papier dont il est question
+
 [baseline models et datasets d'entrainement et de test](https://github.com/arielsho/SemEval-2020-Task-5)
 
 
