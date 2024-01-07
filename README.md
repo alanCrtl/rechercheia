@@ -1,33 +1,33 @@
 # Recherche IA: Implémentation
 
-SemEval2020Clone : copie du repo de l'auteur du papier [this repo](https://github.com/lenyabloko/SemEval2020)
+SemEval2020Clone : Copie du repo de l'auteur du papier [repository](https://github.com/lenyabloko/SemEval2020).
 
-semEvalImple : notre reimplementation du papier
+semEvalImple : Notre réimplementation du papier.
 
-ethan2020.semeval-1.83.pdf : le papier dont il est question
+ethan2020.semeval-1.83.pdf : Le papier dont il est question.
 
-Recherche IA Pres_ ETHAN at SemEval2020.pptx : Diapo présentation (les gifs ne fonctionnent pas)
+Recherche IA Pres_ ETHAN à SemEval2020.pptx : Diapo présentation (les gifs ne fonctionnent pas).
 
-[baseline models et datasets d'entrainement et de test](https://github.com/arielsho/SemEval-2020-Task-5)
+[baseline models et datasets d'entrainement et de test](https://github.com/arielsho/SemEval-2020-Task-5).
 
 ## Contenu de semEvalImple
-### archive 
+### Archive 
 
-fichiers python qui n'ont pas mené à la solution
+Fichiers python qui n'ont pas mené à la solution.
 
 ### Baseline-Subtask1-SVM et Baseline-Subtask2-SequenceLabeling
 
-solution baseline de la compétition
+Solution baseline de la compétition.
 
-### models
+### Models
 
-pour contenir les modèles entrainé du projet
+Modèles entrainés du projet.
 
-### results
+### Results
 
-résultats sous forme de csv ou autres
+Résultats sous forme de csv ou autres.
 
 ### Subtask-1 et Subtask-2
 
-contient les jeux de données d'entrainement et de test pour les tâches
+Jeux de données d'entrainement et de test pour les tâches.
 
