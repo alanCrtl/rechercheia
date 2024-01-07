@@ -35,7 +35,7 @@ contient les jeux de données d'entrainement et de test pour les tâches
 
 lancer roberta finetunning dans google cloud sur gpu
 
-- task1 (F1 score current=0.86):
+- task1 (F1 score current=0.86)
 	
 
 - task2:
