@@ -21,7 +21,7 @@ Solution baseline de la compétition.
 
 ### Models
 
-pour contenir les modèles entrainé du projet.
+Modèles entrainés du projet.
 
 ### Results
 
