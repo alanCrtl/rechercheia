@@ -6,8 +6,9 @@ semEvalImple : notre reimplementation du papier
 
 ethan2020.semeval-1.83.pdf : le papier dont il est question
 
-[baseline models et datasets d'entrainement et de test](https://github.com/arielsho/SemEval-2020-Task-5)
+Recherche IA Pres_ ETHAN at SemEval2020.pptx : Diapo présentation (les gifs ne fonctionnent pas)
 
+[baseline models et datasets d'entrainement et de test](https://github.com/arielsho/SemEval-2020-Task-5)
 
 ## Contenu de semEvalImple
 ### archive 
