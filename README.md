@@ -31,12 +31,3 @@ résultats sous forme de csv ou autres
 
 contient les jeux de données d'entrainement et de test pour les tâches
 
-## TODO
-
-lancer roberta finetunning dans google cloud sur gpu
-
-- task1 (F1 score current=0.86):
-	
-
-- task2:
-	

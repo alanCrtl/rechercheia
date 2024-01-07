@@ -16,7 +16,7 @@ from sklearn.metrics import accuracy_score, recall_score, precision_score, f1_sc
 np.random.seed(500)
 
 print(">> Read data...")
-path = $data_path$
+path = "./train.csv"
 corpus = pd.read_csv(path, encoding='utf-8')
 percent = 0.3 	# 0.3 for testing
 print("File: %s" % path)
